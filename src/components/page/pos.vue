@@ -1,6 +1,6 @@
 <template>
   <div class="pos">
-      <h1>Hello World</h1>
+    
   </div>
 </template>
 
