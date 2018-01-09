@@ -1,6 +1,8 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
+    <i class="icon iconfont icon-hanbao"></i>
+    <i class="icon iconfont icon-huiyuanqia"></i>
     <router-view/>
   </div>
 </template>
