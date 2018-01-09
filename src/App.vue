@@ -1,15 +1,19 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <i class="icon iconfont icon-hanbao"></i>
-    <i class="icon iconfont icon-huiyuanqia"></i>
+    <leftNav></leftNav>
     <router-view/>
   </div>
 </template>
 
 <script>
+// 引入侧边栏组件
+import leftNav from '@/components/common/leftNav.vue'
 export default {
-  name: 'app'
+  name: 'app',
+  // 注册组件
+  components :{
+    leftNav
+  }
 }
 </script>
 
