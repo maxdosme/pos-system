@@ -34,12 +34,34 @@
             <div class="title">常用商品</div>
             <div class="often-goods-list">
               <ul>
-                <li>
-                  <span>香辣鸡腿堡</span>
-                  <span class="o-price">￥16元</span>
+                <li v-for="goods in oftenGoods">
+                  <span>{{ goods.goodsName }}</span>
+                  <span class="o-price">{{ goods.price }}</span>
                 </li>
               </ul>
             </div>
+          </div>
+          <div class="goods-type">
+            <el-tabs>
+              <el-tab-pane label="汉堡">
+                <ul class="cookList">
+                  <li>
+                     <span class="foodImg"><img src="http://7xjyw1.com1.z0.glb.clouddn.com/pos001.jpg" width="100%"></span>
+                     <span class="foodName">香辣鸡腿堡</span>
+                     <span class="foodPrice">￥20.00元</span>
+                  </li>
+                </ul>
+              </el-tab-pane>
+              <el-tab-pane label="小食">
+                小食
+              </el-tab-pane>
+              <el-tab-pane label="饮料">
+                饮料
+              </el-tab-pane>
+              <el-tab-pane label="套餐">
+                套餐
+              </el-tab-pane>
+            </el-tabs>
           </div>
         </el-col>
       </el-row>
@@ -70,7 +92,51 @@ export default {
           goodsName: '甜筒',
           price: 3,
           count:1
-        }]
+        }],
+        oftenGoods:[
+          {
+              goodsId:1,
+              goodsName:'香辣鸡腿堡',
+              price:18
+          }, {
+              goodsId:2,
+              goodsName:'田园鸡腿堡',
+              price:15
+          }, {
+              goodsId:3,
+              goodsName:'和风汉堡',
+              price:15
+          }, {
+              goodsId:4,
+              goodsName:'快乐全家桶',
+              price:80
+          }, {
+              goodsId:5,
+              goodsName:'脆皮炸鸡腿',
+              price:10
+          }, {
+              goodsId:6,
+              goodsName:'魔法鸡块',
+              price:20
+          }, {
+              goodsId:7,
+              goodsName:'可乐大杯',
+              price:10
+          }, {
+              goodsId:8,
+              goodsName:'雪顶咖啡',
+              price:18
+          }, {
+              goodsId:9,
+              goodsName:'大块鸡米花',
+              price:15
+          }, {
+              goodsId:20,
+              goodsName:'香脆鸡柳',
+              price:17
+          }
+          
+      ]
     }
   },
   mounted:function(){
@@ -108,5 +174,35 @@ export default {
   }
   .o-price {
     color: #58b7ff;
+  }
+  .goods-type {
+    clear: both;
+  }
+  .cookList li{
+    list-style: none;
+    float: left;
+    width: 23%;
+    border: 1px solid #E5E9F2;
+    height: auto;
+    overflow: hidden;
+    background-color: #fff;
+    margin: 2px;
+    padding: 2px;
+  }
+  .cookList li span {
+    display: block;
+    float: left;
+  }
+  .foodImg {
+    width: 40%;
+  }
+  .foodName {
+    font-size: 18px;
+    padding-left: 10px;
+    color: brown;
+  }
+  .foodPrice {
+    font-size: 16px;
+    padding: 10px 0 0 10px;
   }
 </style>
