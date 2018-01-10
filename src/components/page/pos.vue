@@ -29,8 +29,18 @@
             </el-tab-pane>
           </el-tabs>
         </el-col>
-        <el-col>
-          我是产品栏
+        <el-col :span="17">
+          <div class="often-goods">
+            <div class="title">常用商品</div>
+            <div class="often-goods-list">
+              <ul>
+                <li>
+                  <span>香辣鸡腿堡</span>
+                  <span class="o-price">￥16元</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </el-col>
       </el-row>
   </div>
@@ -80,5 +90,23 @@ export default {
   }
   .div-btn {
     margin-top: 10px;
+  }
+  .title {
+    height: 20px;
+    border-bottom: 1px solid #d3dce6;
+    background-color: #f9fafc;
+    padding: 10px;
+    text-align: left;
+  }
+  .often-goods-list ul li {
+    list-style: none;
+    float: left;
+    border: 1px solid #e5e9f2;
+    padding: 10px;
+    margin: 10px;
+    background-color: #fff;
+  }
+  .o-price {
+    color: #58b7ff;
   }
 </style>
