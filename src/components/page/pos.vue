@@ -45,7 +45,7 @@
             <el-tabs>
               <el-tab-pane label="汉堡">
                 <ul class="cookList">
-                  <li v-for="tGoods in typeGoods">
+                  <li v-for="tGoods in type0Goods">
                      <span class="foodImg"><img :src="tGoods.goodsImg" width="100%"></span>
                      <span class="foodName">{{ tGoods.goodsName }}</span>
                      <span class="foodPrice">￥{{ tGoods.price }}元</span>
@@ -68,6 +68,8 @@
   </div>
 </template>
 <script>
+// 引入axios插件
+import axios from 'axios';
 export default {
   name: 'pos',
   // 模拟数据
@@ -93,103 +95,23 @@ export default {
           price: 3,
           count:1
         }],
-        oftenGoods:[
-          {
-              goodsId:1,
-              goodsName:'香辣鸡腿堡',
-              price:18
-          }, {
-              goodsId:2,
-              goodsName:'田园鸡腿堡',
-              price:15
-          }, {
-              goodsId:3,
-              goodsName:'和风汉堡',
-              price:15
-          }, {
-              goodsId:4,
-              goodsName:'快乐全家桶',
-              price:80
-          }, {
-              goodsId:5,
-              goodsName:'脆皮炸鸡腿',
-              price:10
-          }, {
-              goodsId:6,
-              goodsName:'魔法鸡块',
-              price:20
-          }, {
-              goodsId:7,
-              goodsName:'可乐大杯',
-              price:10
-          }, {
-              goodsId:8,
-              goodsName:'雪顶咖啡',
-              price:18
-          }, {
-              goodsId:9,
-              goodsName:'大块鸡米花',
-              price:15
-          }, {
-              goodsId:20,
-              goodsName:'香脆鸡柳',
-              price:17
-          }
-      ],
-      typeGoods:[
-          {
-              goodsId:1,
-              goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos001.jpg",
-              goodsName:'香辣鸡腿堡',
-              price:18
-          }, {
-              goodsId:2,
-              goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos002.jpg",
-              goodsName:'田园鸡腿堡',
-              price:15
-          }, {
-              goodsId:3,
-              goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos004.jpg",
-              goodsName:'和风汉堡',
-              price:15
-          }, {
-              goodsId:4,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos003.jpg",
-              goodsName:'快乐全家桶',
-              price:80
-          }, {
-              goodsId:5,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos003.jpg",
-              goodsName:'脆皮炸鸡腿',
-              price:10
-          }, {
-              goodsId:6,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos004.jpg",
-              goodsName:'魔法鸡块',
-              price:20
-          }, {
-              goodsId:7,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos001.jpg",
-              goodsName:'可乐大杯',
-              price:10
-          }, {
-              goodsId:8,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos003.jpg",
-              goodsName:'雪顶咖啡',
-              price:18
-          }, {
-              goodsId:9,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos002.jpg",
-              goodsName:'大块鸡米花',
-              price:15
-          }, {
-              goodsId:20,
-               goodsImg:"http://7xjyw1.com1.z0.glb.clouddn.com/pos002.jpg",
-              goodsName:'香脆鸡柳',
-              price:17
-          }
-      ]
+      oftenGoods:[],
+      type0Goods:[],
+      type1Goods:[],
+      type2Goods:[],
+      type3Goods:[]
     }
+  },
+  // 创建后端数据请求
+  created:function(){
+    axios.get('http://jspang.com/DemoApi/oftenGoods.php')
+    // 使用箭头函数跨作用域
+    .then(reponse=>{
+      // console.log(reponse);
+    })
+    .catch(error=>{
+      // console.log(error);
+    })
   },
   mounted:function(){
     //  设置height:100%;
