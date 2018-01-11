@@ -36,7 +36,7 @@
               <ul>
                 <li v-for="goods in oftenGoods">
                   <span>{{ goods.goodsName }}</span>
-                  <span class="o-price">{{ goods.price }}</span>
+                  <span class="o-price">￥{{ goods.price }}元</span>
                 </li>
               </ul>
             </div>
@@ -53,13 +53,31 @@
                 </ul>
               </el-tab-pane>
               <el-tab-pane label="小食">
-                小食
+                <ul class="cookList">
+                  <li v-for="tGoods in type1Goods">
+                     <span class="foodImg"><img :src="tGoods.goodsImg" width="100%"></span>
+                     <span class="foodName">{{ tGoods.goodsName }}</span>
+                     <span class="foodPrice">￥{{ tGoods.price }}元</span>
+                  </li>
+                </ul>
               </el-tab-pane>
               <el-tab-pane label="饮料">
-                饮料
+               <ul class="cookList">
+                  <li v-for="tGoods in type2Goods">
+                     <span class="foodImg"><img :src="tGoods.goodsImg" width="100%"></span>
+                     <span class="foodName">{{ tGoods.goodsName }}</span>
+                     <span class="foodPrice">￥{{ tGoods.price }}元</span>
+                  </li>
+                </ul>
               </el-tab-pane>
               <el-tab-pane label="套餐">
-                套餐
+               <ul class="cookList">
+                  <li v-for="tGoods in type3Goods">
+                     <span class="foodImg"><img :src="tGoods.goodsImg" width="100%"></span>
+                     <span class="foodName">{{ tGoods.goodsName }}</span>
+                     <span class="foodPrice">￥{{ tGoods.price }}元</span>
+                  </li>
+                </ul>
               </el-tab-pane>
             </el-tabs>
           </div>
@@ -75,26 +93,8 @@ export default {
   // 模拟数据
   data(){
     return {
-      tableData: [{
-          goodsName: '可口可乐',
-          price: 8,
-          count:1
-        }, {
-          
-          goodsName: '香辣鸡腿堡',
-          price: 15,
-          count:1
-        }, {
-         
-          goodsName: '爱心薯条',
-          price: 6,
-          count:1
-        }, {
-         
-          goodsName: '甜筒',
-          price: 3,
-          count:1
-        }],
+      tableData: [],
+      // 创建数据存储容器
       oftenGoods:[],
       type0Goods:[],
       type1Goods:[],
@@ -108,9 +108,23 @@ export default {
     // 使用箭头函数跨作用域
     .then(reponse=>{
       // console.log(reponse);
+      this.oftenGoods = reponse.data;
     })
     .catch(error=>{
       // console.log(error);
+      alert("网络错误，无法访问！");
+    })
+
+
+    axios.get('http://jspang.com/DemoApi/typeGoods.php')
+    .then(reponse=>{
+      this.type0Goods = reponse.data[0];
+      this.type1Goods = reponse.data[1];
+      this.type2Goods = reponse.data[2];
+      this.type3Goods = reponse.data[3];      
+    })
+    .catch(error=>{
+      alert("网络错误，无法访问！")
     })
   },
   mounted:function(){
