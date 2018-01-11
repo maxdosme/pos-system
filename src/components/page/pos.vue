@@ -34,7 +34,7 @@
             <div class="title">常用商品</div>
             <div class="often-goods-list">
               <ul>
-                <li v-for="goods in oftenGoods">
+                <li v-for="goods in oftenGoods" @click="addOrderList(goods)">
                   <span>{{ goods.goodsName }}</span>
                   <span class="o-price">￥{{ goods.price }}元</span>
                 </li>
@@ -45,34 +45,34 @@
             <el-tabs>
               <el-tab-pane label="汉堡">
                 <ul class="cookList">
-                  <li v-for="tGoods in type0Goods">
-                     <span class="foodImg"><img :src="tGoods.goodsImg" width="100%"></span>
-                     <span class="foodName">{{ tGoods.goodsName }}</span>
-                     <span class="foodPrice">￥{{ tGoods.price }}元</span>
+                  <li v-for="goods in type0Goods" @click="addOrderList(goods)">
+                     <span class="foodImg"><img :src="goods.goodsImg" width="100%"></span>
+                     <span class="foodName">{{ goods.goodsName }}</span>
+                     <span class="foodPrice">￥{{ goods.price }}元</span>
                   </li>
                 </ul>
               </el-tab-pane>
               <el-tab-pane label="小食">
                 <ul class="cookList">
-                  <li v-for="tGoods in type1Goods">
-                     <span class="foodImg"><img :src="tGoods.goodsImg" width="100%"></span>
-                     <span class="foodName">{{ tGoods.goodsName }}</span>
-                     <span class="foodPrice">￥{{ tGoods.price }}元</span>
+                  <li v-for="goods in type1Goods" @click="addOrderList(goods)">
+                     <span class="foodImg"><img :src="goods.goodsImg" width="100%"></span>
+                     <span class="foodName">{{ goods.goodsName }}</span>
+                     <span class="foodPrice">￥{{ goods.price }}元</span>
                   </li>
                 </ul>
               </el-tab-pane>
               <el-tab-pane label="饮料">
                <ul class="cookList">
-                  <li v-for="tGoods in type2Goods">
-                     <span class="foodImg"><img :src="tGoods.goodsImg" width="100%"></span>
-                     <span class="foodName">{{ tGoods.goodsName }}</span>
-                     <span class="foodPrice">￥{{ tGoods.price }}元</span>
+                  <li v-for="goods in type2Goods" @click="addOrderList(goods)">
+                     <span class="foodImg"><img :src="goods.goodsImg" width="100%"></span>
+                     <span class="foodName">{{ goods.goodsName }}</span>
+                     <span class="foodPrice">￥{{ goods.price }}元</span>
                   </li>
                 </ul>
               </el-tab-pane>
               <el-tab-pane label="套餐">
                <ul class="cookList">
-                  <li v-for="tGoods in type3Goods">
+                  <li v-for="tGoods in type3Goods" @click="addOrderList(tGoods)">
                      <span class="foodImg"><img :src="tGoods.goodsImg" width="100%"></span>
                      <span class="foodName">{{ tGoods.goodsName }}</span>
                      <span class="foodPrice">￥{{ tGoods.price }}元</span>
@@ -132,6 +132,35 @@ export default {
     var orderHeiht = document.body.clientHeight;
     // console.log(orderHeiht);
     document.getElementById('order-list').style.height = orderHeiht+'px';
+  },
+  methods:{
+    addOrderList(goods){
+      // 商品是否存在于列表中
+      let _this = this;
+      let isHave = false;
+      for(let i = 0;i<_this.tableData.length;i++){
+        if(_this.tableData[i].goodsId == goods.goodsId){
+            isHave = true;
+        }
+      }
+      // 根据判断的值处理业务逻辑
+      if(isHave){
+        // 改变列表商品数量
+        let arr = _this.tableData.filter(o=>o.goodsId == goods.goodsId);
+        arr[0].count++;
+        // console.log(arr);
+      }else {
+        // 填入产品
+        let newGoods = {
+          goodsId: goods.goodsId,
+          goodsName: goods.goodsName,
+          price: goods.price,
+          count: 1
+        }
+         // 填入商品列表
+         _this.tableData.push(newGoods);
+      }
+    }
   }
 }
 </script>
@@ -159,6 +188,7 @@ export default {
     padding: 10px;
     margin: 10px;
     background-color: #fff;
+    cursor: pointer;
   }
   .o-price {
     color: #58b7ff;
@@ -176,6 +206,7 @@ export default {
     background-color: #fff;
     margin: 2px;
     padding: 2px;
+    cursor: pointer;
   }
   .cookList li span {
     display: block;
