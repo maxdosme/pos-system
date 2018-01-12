@@ -10,14 +10,18 @@
                 <el-table-column prop="price" label="金额"></el-table-column>
                 <el-table-column label="操作" fixed="right">
                   <template slot-scope="scoped">
-                    <el-button type="text" size="small">删除</el-button>
-                    <el-button type="text" size="small">增加</el-button>
+                    <el-button type="text" size="small" @click="delGoods(scoped.row)">删除</el-button>
+                    <!-- addOrderList(scoped.row)在添加一行(element框架规定) -->
+                    <el-button type="text" size="small" @click="addOrderList(scoped.row)">增加</el-button>
                   </template>
                 </el-table-column>
               </el-table>
+              <div class="totaDiv">
+                <small>数量：</small>{{ totalCount }} &nbsp;&nbsp;&nbsp;&nbsp;<small>金额：</small>{{ totalMoney }}元
+              </div>
               <div class="div-btn">
                 <el-button type="warning">挂单</el-button>
-                <el-button type="danger">删除</el-button>
+                <el-button type="danger" @click="delAllGoods()">删除</el-button>
                 <el-button type="success">结账</el-button>
               </div>
             </el-tab-pane>
@@ -87,141 +91,178 @@
 </template>
 <script>
 // 引入axios插件
-import axios from 'axios';
+import axios from "axios";
 export default {
-  name: 'pos',
+  name: "pos",
   // 模拟数据
-  data(){
+  data() {
     return {
       tableData: [],
       // 创建数据存储容器
-      oftenGoods:[],
-      type0Goods:[],
-      type1Goods:[],
-      type2Goods:[],
-      type3Goods:[]
-    }
+      oftenGoods: [],
+      type0Goods: [],
+      type1Goods: [],
+      type2Goods: [],
+      type3Goods: [],
+      totalMoney: 0,
+      totalCount: 0
+    };
   },
   // 创建后端数据请求
-  created:function(){
-    axios.get('http://jspang.com/DemoApi/oftenGoods.php')
-    // 使用箭头函数跨作用域
-    .then(reponse=>{
-      // console.log(reponse);
-      this.oftenGoods = reponse.data;
-    })
-    .catch(error=>{
-      // console.log(error);
-      alert("网络错误，无法访问！");
-    })
+  created: function() {
+    axios
+      .get("http://jspang.com/DemoApi/oftenGoods.php")
+      // 使用箭头函数跨作用域
+      .then(reponse => {
+        // console.log(reponse);
+        this.oftenGoods = reponse.data;
+      })
+      .catch(error => {
+        // console.log(error);
+        alert("网络错误，无法访问！");
+      });
 
-
-    axios.get('http://jspang.com/DemoApi/typeGoods.php')
-    .then(reponse=>{
-      this.type0Goods = reponse.data[0];
-      this.type1Goods = reponse.data[1];
-      this.type2Goods = reponse.data[2];
-      this.type3Goods = reponse.data[3];      
-    })
-    .catch(error=>{
-      alert("网络错误，无法访问！")
-    })
+    axios
+      .get("http://jspang.com/DemoApi/typeGoods.php")
+      .then(reponse => {
+        this.type0Goods = reponse.data[0];
+        this.type1Goods = reponse.data[1];
+        this.type2Goods = reponse.data[2];
+        this.type3Goods = reponse.data[3];
+      })
+      .catch(error => {
+        alert("网络错误，无法访问！");
+      });
   },
-  mounted:function(){
+  mounted: function() {
     //  设置height:100%;
     var orderHeiht = document.body.clientHeight;
     // console.log(orderHeiht);
-    document.getElementById('order-list').style.height = orderHeiht+'px';
+    document.getElementById("order-list").style.height = orderHeiht + "px";
   },
-  methods:{
-    addOrderList(goods){
+  methods: {
+    addOrderList(goods) {
+      // 初始化总数量、总价格
+      this.totalMoney = 0;
+      this.totalCount = 0;
       // 商品是否存在于列表中
       let _this = this;
       let isHave = false;
-      for(let i = 0;i<_this.tableData.length;i++){
-        if(_this.tableData[i].goodsId == goods.goodsId){
-            isHave = true;
+      for (let i = 0; i < _this.tableData.length; i++) {
+        if (_this.tableData[i].goodsId == goods.goodsId) {
+          isHave = true;
         }
       }
       // 根据判断的值处理业务逻辑
-      if(isHave){
+      if (isHave) {
         // 改变列表商品数量
-        let arr = _this.tableData.filter(o=>o.goodsId == goods.goodsId);
+        let arr = _this.tableData.filter(o => o.goodsId == goods.goodsId);
         arr[0].count++;
         // console.log(arr);
-      }else {
+      } else {
         // 填入产品
         let newGoods = {
           goodsId: goods.goodsId,
           goodsName: goods.goodsName,
           price: goods.price,
           count: 1
-        }
-         // 填入商品列表
-         _this.tableData.push(newGoods);
+        };
+        // 填入商品列表
+        _this.tableData.push(newGoods);
+      }
+      this.getAllMoney();
+    },
+    // 删除单个商品
+    delGoods(goods) {
+      this.tableData = this.tableData.filter(o => o.goodsId != goods.goodsId);
+      // 调用金额计算函数
+      this.getAllMoney();
+    },
+    // 删除全部商品
+    delAllGoods(){
+      this.tableData = [];
+      this.totalMoney = 0;
+      this.totalCount = 0;
+    },
+    // 封装总金额计算逻辑
+    getAllMoney() {
+      this.totalMoney = 0;
+      this.totalCount = 0;
+      if (this.tableData) {
+        // 遍历数组并回调函数（vscode快速格式化alt+shift+f）
+        this.tableData.forEach(element => {
+          // 数量总合
+          this.totalCount += element.count;
+          this.totalMoney = this.totalMoney + (element.count * element.price);
+        });
       }
     }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only(本范围内有效，不加=全局有效) -->
 <style scoped>
-  .pos-order {
-    background-color: #f9fafc;
-    border-right: 1px solid #c0ccda;
-  }
-  .div-btn {
-    margin-top: 10px;
-  }
-  .title {
-    height: 20px;
-    border-bottom: 1px solid #d3dce6;
-    background-color: #f9fafc;
-    padding: 10px;
-    text-align: left;
-  }
-  .often-goods-list ul li {
-    list-style: none;
-    float: left;
-    border: 1px solid #e5e9f2;
-    padding: 10px;
-    margin: 10px;
-    background-color: #fff;
-    cursor: pointer;
-  }
-  .o-price {
-    color: #58b7ff;
-  }
-  .goods-type {
-    clear: both;
-  }
-  .cookList li{
-    list-style: none;
-    float: left;
-    width: 23%;
-    border: 1px solid #E5E9F2;
-    height: auto;
-    overflow: hidden;
-    background-color: #fff;
-    margin: 2px;
-    padding: 2px;
-    cursor: pointer;
-  }
-  .cookList li span {
-    display: block;
-    float: left;
-  }
-  .foodImg {
-    width: 40%;
-  }
-  .foodName {
-    font-size: 18px;
-    padding-left: 10px;
-    color: brown;
-  }
-  .foodPrice {
-    font-size: 16px;
-    padding: 10px 0 0 10px;
-  }
+.pos-order {
+  background-color: #f9fafc;
+  border-right: 1px solid #c0ccda;
+}
+.div-btn {
+  margin-top: 10px;
+}
+.title {
+  height: 20px;
+  border-bottom: 1px solid #d3dce6;
+  background-color: #f9fafc;
+  padding: 10px;
+  text-align: left;
+}
+.often-goods-list ul li {
+  list-style: none;
+  float: left;
+  border: 1px solid #e5e9f2;
+  padding: 10px;
+  margin: 10px;
+  background-color: #fff;
+  cursor: pointer;
+}
+.o-price {
+  color: #58b7ff;
+}
+.goods-type {
+  clear: both;
+}
+.cookList li {
+  list-style: none;
+  float: left;
+  width: 23%;
+  border: 1px solid #e5e9f2;
+  height: auto;
+  overflow: hidden;
+  background-color: #fff;
+  margin: 2px;
+  padding: 2px;
+  cursor: pointer;
+}
+.cookList li span {
+  display: block;
+  float: left;
+}
+.foodImg {
+  width: 40%;
+}
+.foodName {
+  font-size: 18px;
+  padding-left: 10px;
+  color: brown;
+}
+.foodPrice {
+  font-size: 16px;
+  padding: 10px 0 0 10px;
+}
+.totaDiv {
+  background-color: #fff;
+  padding: 10px;
+  border-bottom: 1px solid #d3dce6;
+}
 </style>
