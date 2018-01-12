@@ -22,7 +22,7 @@
               <div class="div-btn">
                 <el-button type="warning">挂单</el-button>
                 <el-button type="danger" @click="delAllGoods()">删除</el-button>
-                <el-button type="success">结账</el-button>
+                <el-button type="success" @click="checkOut()">结账</el-button>
               </div>
             </el-tab-pane>
             <el-tab-pane label="挂单">
@@ -183,6 +183,20 @@ export default {
       this.tableData = [];
       this.totalMoney = 0;
       this.totalCount = 0;
+    },
+    // 模拟结账
+    checkOut(){
+      if(this.totalCount != 0){
+        this.tableData = [];
+        this.totalMoney = 0;
+        this.totalCount = 0;
+        this.$message({
+          message: "结账成功！",
+          type: 'success'
+        });
+      }else {
+        this.$message.error("请添加商品！");
+      }
     },
     // 封装总金额计算逻辑
     getAllMoney() {
